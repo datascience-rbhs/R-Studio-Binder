@@ -1,0 +1,342 @@
+---
+title: "Session 1"
+output: html_document
+date: "2024-01-26"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Session 1
+
+## Importing Data, Data Wrangling, and Tidy Data
+
+### Objectives of today's session
+
+1.  Import various datasets
+
+2.  Use `dplyr` package to preprocess our datasets
+
+## Plan
+
+1.  Read excel file, show arguments how they work
+2.  Read tab-delimited file, show arguments how they work
+3.  Read comma-sep files, show arguments how they work
+4.  For other types of files, json, xml look for function in R
+5.  **Exercise: Import a sample CSV file and an Excel file into R from directory**
+6.  Introduction to **`dplyr`** packages.
+7.  Common data manipulation tasks: filtering, selecting, mutating, summarizing.
+8.  Grouping data and performing operations on groups.
+9.  Joining data from different sources.
+10. Handling missing data.
+11. **Exercise: ask students to do some basic operations on sample dataset from prev exercise**
+
+Tidy data is **a standard way of mapping the meaning of a dataset to its structure**.
+
+```{r}
+library(tidyr)
+library(dplyr)
+```
+
+------------------------------------------------------------------------
+
+## R is simple calculator
+
+| Operator | Description                 |
+|----------|-----------------------------|
+| \+       | Addition                    |
+| \-       | Subtraction                 |
+| \*       | Multiplication              |
+| /        | Division                    |
+| \^       | Exponentiation (Power)      |
+| %%       | Modulus (Remainder)         |
+| %/%      | Integer Division (Quotient) |
+
+```{r}
+398 + 783
+
+600 / 5
+
+45 * 45
+```
+
+[**Exercise: Try doing following calculation using math operators**]{style="color:red"}
+
+$$
+\frac{1+5^{1/2}} {2}
+$$
+
+```{r}
+# Your code here
+
+```
+
+[**Exercise: find modulus of 5 divided by 2**]{style="color:red"}
+
+```{r}
+# Your code here
+
+```
+
+------------------------------------------------------------------------
+
+# R script
+
+# Data types
+
+```{r}
+num_variable <- 42.5
+class(num_variable)
+```
+
+```{r}
+char_variable = "Welcome to the DS club"
+class(char_variable)
+```
+
+```{r}
+logic_variable = TRUE
+class(logic_variable)
+```
+
+```{r}
+num_variable == 42.5
+class(num_variable == 42.5)
+```
+
+# R Functions
+
+3 Key Properties of an R function.
+
+-   functions have a name and they are case sensetive
+
+-   following the name they have a pair of ()
+
+-   inside (), function take 0 or more arguments
+
+```{r}
+summ_two_numbers <- function(a=3, b=6){
+  return(a+b)
+}
+
+summ_two_numbers()
+summ_two_numbers(5, 19)
+```
+
+[**Exercise: Complete this code to return square of 9**]{style="color:red"}
+
+```{r}
+# Your code here
+# squared_num <- function(x){
+#   squared = ___
+#   return(___)
+# }
+# 
+# squared_num(9)
+```
+
+------------------------------------------------------------------------
+
+# R vectors
+
+```{r}
+nums_vector = c(2, 5, 10, 60)
+
+nums_vector[3]
+
+nums_vector[2:3]
+
+nums_vector[nums_vector > 9]
+```
+
+[**Exercise: create a vector of odd numbers till 10 and return numbers greater than 5**]{style="color:red"}
+
+```{r}
+# Your code here
+
+```
+
+# Read data
+
+```{r}
+# UNCOMMENT these lines
+# df = read.table('file.txt')
+# df = read.csv('file.csv')
+```
+
+# Using libraries
+
+All libraries are installed in this environment
+
+```{r}
+# UNCOMMENT these lines
+# library(readr)
+# 
+# df = readr::read_csv('file.csv', col_select = c('col1'))
+```
+
+[Exercise: install library for excel files "readxl" and read "file.xlsx" using `read_excel` function]{style="color:red"}
+
+```{r}
+# UNCOMMENT these lines
+# library(readxl)
+# excel_file = readxl::read_excel('file.xls', sheet = 'Sheet1')
+# excel_file
+```
+
+------------------------------------------------------------------------
+
+# Split cells with `tidyr` package
+
+[Exercise: load `tidyr` package]{style="color:red"}
+
+```{r}
+# Let's create sample dataframe and look at some tidyr functions to merge and split data
+
+splcing_data <- data.frame(
+  Event_ID = c('ENSG171863_RI', 
+               'ENSG168356_SE', 
+               'ENSG160185_SE', 
+               'ENSG243960_A5',
+               'ENSG197291_A3'),
+  PSI_value_1 = as.character(c('0.', '0.', '0.', '0.', '1.')),
+  PSI_value_2 = as.character(c(1,2,3,4,0)),
+  Group = c("A", "B", "B", "A", "A"), 
+  Attribute1 = c('NA', 5, "NA", 9, 'NA')
+)
+
+splcing_data
+```
+
+```{r}
+new_splicing_data = tidyr::unite(splcing_data, PSI_value_1, PSI_value_2, col="PSI_value", sep="", remove=TRUE)
+new_splicing_data
+
+# return new dataframe with new defined column
+# also we can remove old columns or remain them
+# you could play with "sep" and "col" arguments
+```
+
+```{r}
+# tidyr::separate same as tidyr::separate_wider_delim
+tidyr::separate(splcing_data, Event_ID, sep="_", into=c('ID', 'Splicing event'), remove=TRUE)
+```
+
+[Exercise: work with another dataset, unite and separate this dataset]{style="color:red"}
+
+```{r}
+# Your code here
+
+```
+
+[Exercise: Unite all columns of ***splicing_data*** into one column and named it ***all_columns***]{style="color:red"}
+
+```{r}
+# Your code here
+
+```
+
+# Reshape data
+
+```{r}
+# First of all, let's create sample dataframe and then reshape it
+table2 <- data.frame(
+  country = c('A', 'A', 'A', 'A', 'B', 'B', 'B', 'B', 'C', 'C', 'C', 'C'),
+  year = c(1999, 1999, 2000, 2000, 1999, 1999, 2000, 2000, 1999, 1999, 2000, 2000),
+  type = c('cases', 'pop', 'cases', 'pop', 'cases', 'pop', 'cases', 'pop', 'cases', 'pop', 'cases', 'pop'),
+  count = c('0.7K', '19M', '2K', '20M', '37K', '172M', '80K', '174M', '212K', '1T', '213K', '1T')
+)
+
+table2
+```
+
+```{r}
+# Let's reshape it
+tidyr::pivot_wider(table2, names_from = type, values_from = count)
+```
+
+[**I think we don't need exercise here**]{style="color:red"}
+
+# Dplyr package
+
+# joining, transforming and summarizing
+
+### Return back to our splicing data, and join it to another dataframe with new Attribute2, but new dataframe has information only for 4 Events
+
+What to do??? ---\> left and right joins
+
+```{r}
+new_splicing_data$PSI_value = as.numeric(new_splicing_data$PSI_value)
+new_splicing_data
+```
+
+```{r}
+tmp_df = data.frame(
+  Event_ID = c('ENSG171863_RI', 'ENSG168356_SE', 'ENSG160185_SE', 'ENSG243960_A5'),
+  Attribute2 = c(43, 54, 72, 26))
+tmp_df
+```
+
+### dplyr::left_join
+
+```{r}
+dplyr::left_join(new_splicing_data, tmp_df, by="Event_ID")
+```
+
+### dplyr::right_join
+
+```{r}
+dplyr::right_join(new_splicing_data, tmp_df, by="Event_ID")
+```
+
+### dplyr::select
+
+```{r}
+# Select needed columns 
+new_splicing_data %>% select(Event_ID)
+```
+
+### dplyr::mutate()
+
+```{r}
+# Transform data in dataframe
+new_splicing_data %>% mutate(new_PSI_value = 10*PSI_value)
+```
+
+### dplyr::filter()
+
+```{r}
+new_splicing_data %>% filter(PSI_value > 0.2)
+```
+
+### dplyr::group_by() & dplyr::summarise()
+
+```{r}
+new_splicing_data %>% 
+  group_by(Group) %>%
+  summarise(
+    mean_value = mean(PSI_value)
+  )
+```
+
+[**Exercise: for below splicing data**]{style="color:red"}
+
+[1. **Select Events with PSI_value below 0.5**]{style="color:red"}
+
+[2. **For found Events, find sum and mean values for each groups where these Events are**]{style="color:red"}
+
+```{r}
+new_splicing_data
+
+# Your code here
+# ...
+```
+
+# Write data
+
+```{r}
+write.csv(new_splicing_data, 'new_splicing_data.csv')
+ 
+# readr::write_excel_csv()
+```
