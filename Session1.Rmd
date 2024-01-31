@@ -1,5 +1,5 @@
 ---
-title: "Session 1"
+title: "Importing, Tidying, and Tranforming Data"
 output: html_document
 date: "2024-01-26"
 ---
@@ -8,15 +8,19 @@ date: "2024-01-26"
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Session 1
+# Series On: Data Wrangling and Visualization in R
 
-## Importing Data, Data Wrangling, and Tidy Data
+## Session 1: Importing Data, Data Wrangling, and Tidy Data
+
+![No data science without data!](images/import.png)
 
 ### Objectives of today's session
 
-1.  Import various datasets
+1.  Learn how to import raw data in R.
 
-2.  Use `dplyr` package to preprocess our datasets
+2.  Creat tidy dataset from raw data using `tidyr`.
+
+3.  Use `dplyr` package for data transformation.
 
 ## Plan
 
@@ -35,13 +39,12 @@ knitr::opts_chunk$set(echo = TRUE)
 Tidy data is **a standard way of mapping the meaning of a dataset to its structure**.
 
 ```{r}
-library(tidyr)
 library(dplyr)
 ```
 
 ------------------------------------------------------------------------
 
-## R is simple calculator
+## R is a simple calculator
 
 | Operator | Description                 |
 |----------|-----------------------------|
@@ -61,7 +64,9 @@ library(dplyr)
 45 * 45
 ```
 
-[**Exercise: Try doing following calculation using math operators**]{style="color:red"}
+### [**Exercise:1**]{style="color:coral"}
+
+[1. Try doing following calculation using math operators]{style="color:coral;"}
 
 $$
 \frac{1+5^{1/2}} {2}
@@ -72,7 +77,7 @@ $$
 
 ```
 
-[**Exercise: find modulus of 5 divided by 2**]{style="color:red"}
+[2. Find modulus of 5 divided by 2]{style="color:coral"}
 
 ```{r}
 # Your code here
@@ -81,9 +86,30 @@ $$
 
 ------------------------------------------------------------------------
 
-# R script
+## R script
 
-# Data types
+create a new script file (File \> New File \> R Script)
+
+```{r}
+## Copy this code in the R script
+
+# Assigning numbers to variables
+a <- 5
+b <- 3
+
+# Addition
+sum_result <- a + b
+
+# Subtraction
+diff_result <- a - b
+
+# Print the results
+print("Results of Basic Math Operations:")
+print(paste("Sum: ", sum_result))
+print(paste("Difference: ", diff_result))
+```
+
+## Data types
 
 ```{r}
 num_variable <- 42.5
@@ -102,10 +128,11 @@ class(logic_variable)
 
 ```{r}
 num_variable == 42.5
+num_variable >= 50
 class(num_variable == 42.5)
 ```
 
-# R Functions
+## R Functions
 
 3 Key Properties of an R function.
 
@@ -124,16 +151,18 @@ summ_two_numbers()
 summ_two_numbers(5, 19)
 ```
 
-[**Exercise: Complete this code to return square of 9**]{style="color:red"}
+### [**Exercise:2**]{style="color:coral"}
 
-```{r}
+[Complete this code to return square of 9]{style="color:coral"}
+
+```{r eval=FALSE, include=TRUE}
 # Your code here
-# squared_num <- function(x){
-#   squared = ___
-#   return(___)
-# }
-# 
-# squared_num(9)
+squared_num <- function(x){
+   squared = ___
+   return(___)
+ }
+ 
+ squared_num(9)
 ```
 
 ------------------------------------------------------------------------
@@ -150,39 +179,80 @@ nums_vector[2:3]
 nums_vector[nums_vector > 9]
 ```
 
-[**Exercise: create a vector of odd numbers till 10 and return numbers greater than 5**]{style="color:red"}
+[Exercise: create a vector of odd numbers till 10 and return numbers greater than 5]{style="color:coral"}
 
 ```{r}
 # Your code here
 
 ```
 
-# Read data
+## Read data
+
+Need help looking at the many arguments of read.table you can define? It's easy.
+
+Type this on the cosole: `?read.table`
+
+Don't know what your file looks like? No issue. We can check by reading the file line by line. This works even when the file size in GBs and we don't have a software to open the file on our operating system.
 
 ```{r}
-# UNCOMMENT these lines
-# df = read.table('file.txt')
-# df = read.csv('file.csv')
+# Specify the path to your file
+file_path1 <- "Datasets/file_1_to_read.txt"
+
+# Read the first few lines
+readLines(file_path1, n = 5)
 ```
 
-# Using libraries
-
-All libraries are installed in this environment
+*Note: You can not create an R dataframe and perform data analysis by reading a file line by line.*
 
 ```{r}
-# UNCOMMENT these lines
-# library(readr)
-# 
-# df = readr::read_csv('file.csv', col_select = c('col1'))
+df1 = read.table(file_path1, sep="\t", header = TRUE)
 ```
 
-[Exercise: install library for excel files "readxl" and read "file.xlsx" using `read_excel` function]{style="color:red"}
+To check if your data was properly read
 
 ```{r}
-# UNCOMMENT these lines
-# library(readxl)
-# excel_file = readxl::read_excel('file.xls', sheet = 'Sheet1')
-# excel_file
+df1
+```
+
+### [**Exercise 3**]{style="color:coral"}
+
+```{r}
+# Specify the path to your file
+file_path2 <- "Datasets/file_2_to_read.txt"
+```
+
+[1. Try figuring out what are the best arguments to read the second file]{style="color:coral;"}
+
+```{r}
+# Hint: Read the first few lines
+
+```
+
+[2. Now use read.table function to create the df2]{style="color:coral;"}
+
+```{r eval=FALSE, include=TRUE}
+# Complete the code
+df2 = read.table(file_path2, , )
+
+df2
+```
+
+## Using libraries
+
+All packages are installed in this environment. If you will use RStudio on your machine you will have to install packages before you can load them.
+
+```{r}
+library(readr)
+read_csv("Datasets/file_3_to_read.csv", col_select = c(1:4))
+```
+
+```{r}
+read_csv("Datasets/file_3_to_read.csv", col_select = c(4:9))
+```
+
+```{r}
+library(readxl)
+read_xlsx("Datasets/file_4_to_read.xlsx", sheet = 'Sheet1')
 ```
 
 ------------------------------------------------------------------------
@@ -192,9 +262,13 @@ All libraries are installed in this environment
 [Exercise: load `tidyr` package]{style="color:red"}
 
 ```{r}
+#Your Code Here
+```
+
+```{r}
 # Let's create sample dataframe and look at some tidyr functions to merge and split data
 
-splcing_data <- data.frame(
+splicing_data <- data.frame(
   Event_ID = c('ENSG171863_RI', 
                'ENSG168356_SE', 
                'ENSG160185_SE', 
@@ -203,41 +277,57 @@ splcing_data <- data.frame(
   PSI_value_1 = as.character(c('0.', '0.', '0.', '0.', '1.')),
   PSI_value_2 = as.character(c(1,2,3,4,0)),
   Group = c("A", "B", "B", "A", "A"), 
-  Attribute1 = c('NA', 5, "NA", 9, 'NA')
+  Some_Attribute = c('NA', 5, "NA", 9, 'NA')
 )
 
-splcing_data
+splicing_data
 ```
 
 ```{r}
-new_splicing_data = tidyr::unite(splcing_data, PSI_value_1, PSI_value_2, col="PSI_value", sep="", remove=TRUE)
+new_splicing_data = tidyr::unite(splicing_data, PSI_value_1, PSI_value_2, col="PSI_value", sep="", remove=TRUE)
 new_splicing_data
 
 # return new dataframe with new defined column
-# also we can remove old columns or remain them
+# also we can remove old columns or retain them
 # you could play with "sep" and "col" arguments
 ```
 
 ```{r}
 # tidyr::separate same as tidyr::separate_wider_delim
-tidyr::separate(splcing_data, Event_ID, sep="_", into=c('ID', 'Splicing event'), remove=TRUE)
+tidyr::separate(splicing_data, Event_ID, sep="_", into=c('ID', 'Splicing event'), remove=TRUE)
 ```
 
 [Exercise: work with another dataset, unite and separate this dataset]{style="color:red"}
 
-```{r}
-# Your code here
+1.  Import the data into R.
 
+*Hint: Its a Tab Separated file*
+
+```{r eval=FALSE, include=TRUE}
+# Complete the code here
+path <- "Datasets/gff_file.txt"
+df3 <- read.table(path, )
 ```
 
-[Exercise: Unite all columns of ***splicing_data*** into one column and named it ***all_columns***]{style="color:red"}
+2.  Select column `c(1,3,4,5, and 9)`
 
-```{r}
-# Your code here
+*Hint: Check Base R cheat sheet*
 
+```{r eval=FALSE, include=TRUE}
+# Your the code here
+```
+
+2.  Separate column 9 by `sep=";"` and remove the last two columns
+
+*Hint: Its the same as selecting the first 5 columns*
+
+```{r eval=FALSE, include=TRUE}
+# Complete the code here
+tidyr::select(df3, )
 ```
 
 # Reshape data
+
 
 ```{r}
 # First of all, let's create sample dataframe and then reshape it
@@ -259,6 +349,18 @@ tidyr::pivot_wider(table2, names_from = type, values_from = count)
 [**I think we don't need exercise here**]{style="color:red"}
 
 # Dplyr package
+
+-   *Select* certain columns of data.
+
+-   *Filter* your data to select specific rows.
+
+-   *Arrange* the rows of your data into an order.
+
+-   *Mutate* your data frame to contain new columns.
+
+-   *Summarise* chunks of you data in some way.
+
+Let’s look at how those work.
 
 # joining, transforming and summarizing
 
@@ -339,4 +441,17 @@ new_splicing_data
 write.csv(new_splicing_data, 'new_splicing_data.csv')
  
 # readr::write_excel_csv()
+```
+
+## Revolutionize coding in R with the pipe function `%>%`
+```{r ,eval=FALSE}
+library(dplyr)
+```
+
+
+```{r eval=FALSE, include=FALSE}
+read.table(path, sep="\t") %>%
+  dplyr::select(c(1:5,9)) %>%
+  tidyr::separate(6,sep=";",into = c("Gene","X","Y")) %>%
+  dplyr::select(c(1:6))
 ```

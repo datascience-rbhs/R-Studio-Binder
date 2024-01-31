@@ -1,0 +1,20 @@
+##gff-version 3								
+#!gff-spec-version 1.21								
+sequence001	mine	gene	190	2799	.	+	.	ID=gene0;Dbxref=ASAP:ABE-0000006;
+sequence001	mine	CDS	190	252	.	+	0	ID=CDS0;Parent=gene0;Dbxref=UniProtKB/Swiss-Prot:P0AD86;product=formate dehydrogenase isoform 1;transl_except=(pos:193..195%2Caa:Sec);inference=COORDINATES:similar to AA sequence:INSD:AAC73526.1
+sequence002	mine	CDS	337	2799	.	+	0	ID=CDS0;Parent=gene0;product=formate dehydrogenase;inference=COORDINATES:similar to AA sequence:INSD:AAC73526.1
+sequence002	mine	CDS	203	252	.	+	0	ID=CDS0b;Parent=gene0;Dbxref=UniProtKB/Swiss-Prot:P0AD86;product=formate dehydrogenase isoform 2;inference=COORDINATES:similar to AA sequence:INSD:AAC73526.1
+sequence003	mine	CDS	324	2799	.	+	0	ID=CDS0b;Parent=gene0;product=formate dehydrogenase;inference=COORDINATES:similar to AA sequence:INSD:AAC73525.1
+sequence003	mine	gene	2801	3733	.	+	.	ID=gene2
+sequence004	mine	CDS	2801	3733	.	+	0	ID=CDS2;Parent=gene2;Dbxref=UniProtKB/Swiss-Prot:P00547,InterPro:IPR002928;product=2'%2C3'-cyclic phosphodiesterase;ec_number=2.7.7.1,2.7.1.22;
+sequence004	mine	gene	3734	5020	.	+	.	ID=gene3;Dbxref=ASAP:ABE-0000012,EcoGene:EG11000;gene=thrC;pseudo=true
+sequence005	mine	CDS	3734	5020	.	+	0	ID=CDS3;Parent=gene3;product=threonine synthase;
+sequence005	mine	gene	6090	6459	.	-	.	ID=gene4
+sequence006	mine	CDS	6090	6200	.	-	0	ID=CDS4;Parent=gene4;product=peptide chain release factor;exception=ribosomal slippage
+sequence006	mine	CDS	6202	6459	.	-	0	ID=CDS4;Parent=gene4;product=peptide chain release factor;exception=ribosomal slippage
+sequence007	mine	gene	90	170	.	+	.	ID=genet1
+sequence007	mine	tRNA	90	170	.	+	.	ID=trna1;Parent=genet1;product=tRNA-Leu
+sequence008	mine	gene	6490	8470	.	+	.	ID=gener1
+sequence008	mine	rRNA	6490	8470	.	+	.	ID=rrna1;Parent=gener1;product=18S ribosomal RNA
+sequence009	mine	gene	6529	7959	.	-	.	ID=gene5
+sequence009	mine	CDS	6529	7959	.	-	0	ID=CDS5;Parent=gene5
