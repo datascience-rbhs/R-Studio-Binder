@@ -1,7 +1,10 @@
 ---
 title: "Importing, Tidying, and Tranforming Data"
-output: html_document
-date: "2024-01-26"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    theme: cerulean
 ---
 
 ```{r setup, include=FALSE}
@@ -9,13 +12,13 @@ knitr::opts_chunk$set(echo = TRUE)
 library(dplyr)
 ```
 
-# Series On: Data Wrangling and Visualization in R
+## Series On: Data Wrangling and Visualization in R
 
 ## Session 1: Importing Data, Data Wrangling, and Tidy Data
 
-![**No data science without data!**](images/import.png)
+![](images/import.png)
 
-### Objectives of today's session
+# Objectives of today's session
 
 1.  Learn how to import raw data in R.
 
@@ -23,23 +26,9 @@ library(dplyr)
 
 3.  Use `dplyr` package for data transformation.
 
-## Plan
-
-1.  Read excel file, show arguments how they work
-2.  Read tab-delimited file, show arguments how they work
-3.  Read comma-sep files, show arguments how they work
-4.  For other types of files, json, xml look for function in R
-5.  **Exercise: Import a sample CSV file and an Excel file into R from directory**
-6.  Introduction to **`dplyr`** packages.
-7.  Common data manipulation tasks: filtering, selecting, mutating, summarizing.
-8.  Grouping data and performing operations on groups.
-9.  Joining data from different sources.
-10. Handling missing data.
-11. **Exercise: ask students to do some basic operations on sample dataset from prev exercise**
-
 ------------------------------------------------------------------------
 
-## R is a simple calculator
+# R is a simple calculator
 
 | Operator | Description                 |
 |----------|-----------------------------|
@@ -81,7 +70,7 @@ $$
 
 ------------------------------------------------------------------------
 
-## R script
+# R scripts write, organize, and execute code in the R
 
 create a new script file (File \> New File \> R Script)
 
@@ -104,9 +93,9 @@ print(paste("Sum: ", sum_result))
 print(paste("Difference: ", diff_result))
 ```
 
-## Data types
+# Data Types and Objects in R
 
-![](images/Data%20Types.png)
+![](images/Rvariablesdata.jpg)
 
 ```{r}
 num_variable <- 42.5
@@ -129,7 +118,40 @@ num_variable >= 50
 class(num_variable == 42.5)
 ```
 
-## R Functions
+## Non Atomic R Objects
+
+![**Objects Can Contain Multiple Data Types**](images/vectors,%20matrix,%20and%20dataframes.png)
+
+How do we create a vector.
+
+```{r}
+numeric_vector_1 <- c(1, 2, 3, 4, 5)
+
+numeric_vector_2 <- 1:5
+```
+
+Accessing elements of a numeric vector
+
+```{r}
+numeric_vector_1[3] # Access the third element of the vector
+
+numeric_vector_1[2:3] # Access the second to third element of the vector
+
+numeric_vector_1[c(2,5)] # Access the second and fifth element of the vector
+```
+
+Data Frames are important R objects. We will learn how to create a dataframe later in this session.
+
+### [**Exercise:3**]{style="color:coral"}
+
+[1. Create a vector of odd numbers till 10 and access numbers greater than 5]{style="color:coral;"}
+
+```{r}
+# Your code here
+
+```
+
+# Functions: Block of reusable code that performs a tasks
 
 3 Key Properties of an R function.
 
@@ -166,40 +188,7 @@ squared_num <- function(x){
 
 ------------------------------------------------------------------------
 
-# R Objects
-
-![**Objects Can Contain Multiple Data Types**](images/vectors,%20matrix,%20and%20dataframes.png)
-
-How do we create a vector.
-
-```{r}
-numeric_vector_1 <- c(1, 2, 3, 4, 5)
-
-numeric_vector_2 <- 1:5
-```
-
-Accessing elements of a numeric vector
-
-```{r}
-numeric_vector_1[3] # Access the third element of the vector
-
-numeric_vector_1[2:3] # Access the second to third element of the vector
-
-numeric_vector_1[c(2,5)] # Access the second and fifth element of the vector
-```
-
-Data Frames are important R objects. We will learn how to create a dataframe later in this session.
-
-### [**Exercise:3**]{style="color:coral"}
-
-[1. Create a vector of odd numbers till 10 and access numbers greater than 5]{style="color:coral;"}
-
-```{r}
-# Your code here
-
-```
-
-## Read data
+# Read tables in R
 
 Need help looking at the many arguments of `read.table` you can use? It's easy.
 
@@ -252,9 +241,17 @@ df2 = read.table(file_path2, , )
 df2
 ```
 
-## Using libraries
+# Installing and Loading Libraries
 
-All packages are installed in this environment. If you will use RStudio on your machine you will have to install packages before you can load them.
+All packages are installed in this environment.
+
+If you will use RStudio on your own machine you will have to install packages before you can install using the following command.
+
+```{r eval=FALSE, include=TRUE}
+install.packages("dplyr")
+```
+
+To load a library in your environment, use the `library` command.
 
 ```{r}
 library(readr)
@@ -272,7 +269,7 @@ read_xlsx("Datasets/file_4_to_read.xlsx", sheet = 'Sheet1')
 
 ------------------------------------------------------------------------
 
-# Split cells with `tidyr` package
+# Tidying data with `tidyr` package
 
 **Tidy data** is a standard way of **mapping** the **meaning** of a dataset to its **structure**.
 
@@ -297,6 +294,8 @@ library(_ _ _)
 # Write the line to load dplyr package
 
 ```
+
+## Split and Merge Messy Data
 
 ```{r}
 # Let's create sample dataframe and look at some tidyr functions to merge and split data
@@ -362,12 +361,12 @@ df3 <- read.table(path, )
 tidyr::select(df3, )
 ```
 
-# Reshape data
+# Reshape data with `tidyr`
 
 ![pivot_longer and pivot_wider](images/pivot_longer_new.png)
 
 ```{r}
-# First of all, let's create sample dataframe and then reshape it
+# First of all, let's create sample dataframe.
 
 table2 <- data.frame(
   country = c("A", "A", "B", "B", "C", "C"),
@@ -384,15 +383,14 @@ table2
 tidyr::pivot_longer(table2, cols = c("cases","pop"), names_to = "type", values_to = "count")
 ```
 
-# Dplyr Package
+# Transforming with `dplyr`
 
-| dplyr Verb  | What it Does                                     |
-|-------------|--------------------------------------------------|
-| `filter`    | Retrieve rows based on specified values.         |
-| `select`    | Retrieve columns based on specified names.       |
-| `mutate`    | Add new variables to the data frame.             |
-| `arrange`   | Change the order of the rows based on variables. |
-| `summarize` | Compute summary statistics for the data.         |
+| dplyr Verb | What it Does                                     |
+|------------|--------------------------------------------------|
+| `filter`   | Retrieve rows based on specified values.         |
+| `select`   | Retrieve columns based on specified names.       |
+| `mutate`   | Add new variables to the data frame.             |
+| `arrange`  | Change the order of the rows based on variables. |
 
 Let’s look at how those work.
 
@@ -431,9 +429,9 @@ select(table3, country, year, cases)
 arrange(table3, year)
 ```
 
-# Joining, Transforming and Summarizing
+# Join and Summarise with `dplyr`
 
-### Return back to our splicing data, and join it to another dataframe with new Attribute2, but new dataframe has information only for 4 Events
+Return back to our splicing data, and join it to another dataframe with new Attribute2, but new dataframe has information only for 4 Events
 
 What to do??? ---\> left and right joins
 
@@ -452,9 +450,9 @@ splicing_data_count = data.frame(
 splicing_data_count
 ```
 
-### dplyr::left_join
+![](images/join-outer-2.png)
 
-![](images/join-outer.png){width="302"}
+### dplyr::left_join
 
 ```{r}
 dplyr::left_join(new_splicing_data, splicing_data_count, by="Event_ID")
@@ -466,9 +464,11 @@ dplyr::left_join(new_splicing_data, splicing_data_count, by="Event_ID")
 dplyr::right_join(new_splicing_data, splicing_data_count, by="Event_ID")
 ```
 
-## Revolutionize coding in R with the pipe function `%>%`
+# The Power of `%>%` (Pipe Operator)
 
-![](images/pipe.png)
+Revolutionize your coding style with the **`%>%`** operator.
+
+![](images/pipe.png){width="428"}
 
 ```{r}
 new_splicing_data %>% select(Event_ID)
@@ -487,6 +487,11 @@ new_splicing_data %>% mutate(new_PSI_value = 10*PSI_value)
 new_splicing_data %>% filter(PSI_value > 0.2)
 ```
 
+| dplyr Verb  | What it Does                                   |
+|-------------|------------------------------------------------|
+| `group_by`  | groups the data based on the specified column. |
+| `summarize` | Compute summary statistics for the data.       |
+
 ### dplyr::group_by() & dplyr::summarise()
 
 ```{r}
@@ -501,23 +506,28 @@ new_splicing_data %>%
 
 ```{r}
 write.csv(new_splicing_data, 'new_splicing_data.csv')
- 
-# readr::write_excel_csv()
 ```
 
-### [**Exercise for Self Learning**]{style="color:coral"}
+# Real World Problem for Self Learning
 
-[1. For the `new_splicing_data`, select Events with PSI_value below 0.5]{style="color:coral"}
+Join our coding challenge! Craft the most **well-structured**, **reproducible**, and **readable code** for analyzing qPCR data using tidyverse packages. Your winning code will be showcased with a shout-out on Slack, and you'll receive an exciting prize in the next session.
 
-[**Exercise: for below splicing data**]{style="color:coral"}
+Submission till March 2
 
-[1. **Select Events with PSI_value below 0.5**]{style="color:coral"}
+cq_values.csv table contains well-specific quantification values (Cq) from qPCR
 
-[2. **For found Events, find sum and mean values for each groups where these Events are**]{style="color:coral"}
+```{r echo=FALSE}
+path_cq <- "Datasets/cq_values.csv"
+path_plate <- "Datasets/plate_view.csv"
 
+df_cq <- read.csv(path_cq)
+df_plate <- read.csv(path_plate)
+
+head(df_cq)
+```
+plate_view.csv table provides corresponding information about genes and samples associated with each well
 ```{r}
-new_splicing_data
-
-# Your code here
-# ...
+head(df_plate)
 ```
+
+The df_cq table contains well-specific quantification values (Cq) from qPCR, while the df_quant table provides corresponding information about genes and samples associated with each well. The goal is to clean and process this data to generate a tidy table that presents the quantification values for each gene and sample as replicates. Additionally, calculate the mean Cq for each gene and sample. The analysis and code should be structured, clean, and reproducible, utilizing the tidyverse approach for optimal data manipulation and summarization.
