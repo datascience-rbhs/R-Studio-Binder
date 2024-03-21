@@ -1,0 +1,156 @@
+---
+title: "Session_2"
+author: "Ahmed Aquib"
+date: "2024-03-20"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(dplyr)
+```
+
+## Series On: Data Wrangling and Visualization in R
+
+## Session 1: Plotting Data with Base R and Introduction to ggplot2
+
+# Plotting Simple Data with Base R
+
+## Histograms
+
+Histograms show a distribution of a single variable continuous data.
+
+```{r}
+normal_data <- rnorm(200, mean=100, sd=20)
+head(normal_data)
+hist(normal_data)
+```
+
+## Scatterplots
+
+When you want to check relationship between two variables.
+
+```{r}
+iris
+head(iris)
+
+plot(iris$Sepal.Length, iris$Sepal.Width)
+```
+
+```{r}
+p <- ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width))+
+    geom_point(aes(color = Species, shape = Species))+
+    scale_color_manual(values = c("#00AFBB", "#E7B800", "#FC4E07"))
+print(p)
+```
+
+## Barplots and Boxplots
+
+```{r}
+data("iris")
+barplot(colMeans(iris[,1:4]))
+boxplot(iris[,1:4])
+```
+
+# Let's get started with ggplot2
+
+## Histograms
+
+```{r}
+# ggplot2 requires a tidy data_frame
+df <- data.frame(var=normal_data)
+ggplot(df)
+```
+
+```{r}
+df <- data.frame(var=normal_data)
+ggplot(df)+
+  geom_histogram(aes(var), binwidth = 5, color="white", fill="azure4")
+```
+
+```{r}
+df <- data.frame(var=normal_data)
+ggplot(df)+
+  geom_histogram(aes(var), binwidth = 5, color="white", fill="azure4") +
+  labs(x="Variable",y="Frequency",title="Histogram of a Normal Discribution")
+```
+
+```{r}
+# Define the dataframe
+data <- data.frame(
+  Sample_Name = c("GSM1275863", "GSM1275867", "GSM1275871", "GSM1275875", "GSM1275862", "GSM1275866", "GSM1275870", "GSM1275874"),
+  Treatment = c("Dexamethasone", "Dexamethasone", "Dexamethasone", "Dexamethasone", "None", "None", "None", "None"),
+  Number_of_Transcripts = c(10768, 10051, 11658, 10900, 11177, 11526, 11425, 11000),
+  Total_Counts = c(18783120, 15144524, 30776089, 21135511, 20608402, 25311320, 24411867, 19094104)
+)
+```
+
+## Scatterplots
+
+```{r}
+ggplot(data)
+```
+
+Let's add one single aesthetics to define our x and y of the plot
+
+```{r}
+ggplot(data) +
+  geom_point(aes(x= Number_of_Transcripts, y = Total_Counts))
+```
+
+```{r}
+ggplot(data) +
+  geom_point(aes(x= Number_of_Transcripts, y = Total_Counts, color=Treatment))
+```
+
+```{r}
+ggplot(data) +
+  geom_point(aes(x= Number_of_Transcripts, y = Total_Counts, color=Treatment)) +
+  scale_color_manual(values=c("red","black"),labels=c('Treated',"Untreated"))
+```
+
+```{r}
+ggplot(data) +
+  geom_point(aes(x= Number_of_Transcripts, y = Total_Counts, color=Treatment)) +
+  scale_color_manual(values=c("red","black"),labels=c('Treated',"Untreated")) +
+  geom_text(aes(x = Number_of_Transcripts, y = Total_Counts, label = Sample_Name), 
+            vjust = -0.1, hjust = -0.1, size = 3)+
+  xlim(10000,12000)
+```
+
+## Barplots
+
+```{r}
+summarized_data <- data %>% group_by(Treatment) %>% summarize(Mean=mean(Number_of_Transcripts), SD = sd(Number_of_Transcripts))
+  
+ggplot(summarized_data) +
+  geom_bar(aes(x=Treatment,y=Mean), stat = "identity")
+```
+
+```{r}
+ggplot(summarized_data,aes(x=Treatment,y=Mean, fill=Treatment)) +
+  geom_bar(stat = "identity", width=0.6, position='identity') +
+  geom_errorbar(aes(ymin=Mean-SD,ymax=Mean+SD), width=0.2, color="darkslategrey", size=1)
+```
+
+```{r}
+ggplot(summarized_data,aes(x=Treatment,y=Mean, fill=Treatment)) +
+    geom_bar(stat = "identity", width=0.6, position='identity',color="black") +
+    geom_errorbar(aes(ymin=Mean-SD,ymax=Mean+SD), width=0.1, color="darkslategrey",size=1)+
+     geom_point(data = data, aes(x = Treatment, y = Number_of_Transcripts, shape=Treatment), position = position_jitter(width = 0.2), size = 3, color="darkslategrey")
+```
+
+## Boxplots
+
+```{r}
+ggplot(data, aes(x = Treatment, y = Number_of_Transcripts, fill = Treatment)) +
+  geom_boxplot(color = "black", alpha = 0.8) +  # Add boxplot with border color and transparency
+  geom_jitter(width = 0.2, size = 3, alpha = 0.7) +  # Add jittered points with size and transparency
+  scale_fill_manual(values = c("lightcoral", "lightblue4"), labels = c('Treated', "Untreated")) +  # Custom color scheme
+  labs(
+    x = "Treatment", y = "Number of Transcripts",  # Axis labels
+    title = "Number of Transcripts by Treatment",  # Plot title
+    subtitle = "Boxplot"  # Plot subtitle
+  ) 
+```
