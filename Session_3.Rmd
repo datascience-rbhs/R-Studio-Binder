@@ -1,0 +1,136 @@
+---
+title: "Session 3 Tutorial"
+author: "Ahmed Aquib"
+date: "2024-04-25"
+output: html_document
+---
+
+# Session 3 Tutorial
+
+## Introduction
+This tutorial covers the basics of creating heatmaps using the `pheatmap` package in R. We'll start with a simple heatmap and gradually add more features and customizations.
+
+## Prerequisites
+Before we begin, make sure you have the `pheatmap` and `RColorBrewer` libraries installed and loaded:
+
+```{r setup, include=FALSE}
+library(pheatmap)
+library(RColorBrewer)
+```
+
+## Simplest Heatmap
+Let's start with the simplest heatmap:
+```{r}
+# Generate a 3x3 matrix with numbers 1 to 9
+data_minimal <- matrix(1:9, nrow = 3, ncol = 3, byrow = TRUE)
+
+# Create a minimalist heatmap
+pheatmap(data_minimal)
+```
+## Adding Annotations
+Now, let's add annotations to our heatmap:
+
+```{r}
+dim <- list(row=c(1,2,3), col=c("A","B","C"))
+data_minimal <- matrix(1:9, nrow = 3, ncol = 3, byrow = TRUE, dimnames = dim)
+# Heatmap with annotations
+pheatmap(data_minimal, display_numbers = TRUE, fontsize = 20)
+```
+
+By default, pheatmap applies hierarchical clustering to both rows and columns. To disable clustering, use the `cluster_rows = FALSE, cluster_cols = FALSE`
+
+## Scaling Rows
+
+```{r}
+pheatmap(data_minimal, scale = "row", display_numbers = TRUE, fontsize = 20)
+```
+
+### Question: But what does scaling actually do??
+```{r}
+cal_z_score <- function(x){
+  (x - mean(x)) / sd(x)
+}
+
+t(apply(data_minimal, 1, cal_z_score))
+```
+## A more complex Heatmap
+
+```{r}
+# Generate random data
+data <- matrix(rnorm(150), 25, 6)
+colnames(data) <- paste0("Sample_", 1:6)
+rownames(data) <- paste0("Gene_", 1:25)
+
+# Display the first few rows of the data
+head(data)
+```
+
+## Customizing Heatmaps
+
+```{r}
+pheatmap(data,
+         fontsize_col = 10,
+         fontsize_row = 10,
+         display_numbers = TRUE,
+         number_color = "black", 
+         fontsize_number = 6,
+         border_color = "black")
+```
+
+## Customizing Cell Colors
+
+```{r}
+pheatmap(data,
+         fontsize_col = 10,
+         fontsize_row = 10,
+         display_numbers = TRUE,
+         number_color = "black", 
+         fontsize_number = 6,
+         border_color = "black",
+         col = brewer.pal(10, 'RdYlGn'))
+```
+
+## Adding Annotations
+
+```{r}
+ann_df <- data.frame(Group = rep(c("Disease", "Control"), c(3, 3)),
+                          Lymphocyte_count = rnorm(6))
+
+row.names(ann_df) <- colnames(data)
+
+gene_functions_df <- data.frame(gene_functions = rep(c('Oxidative_phosphorylation', 
+                                                       'Cell_cycle',
+                                                       'Immune_regulation',
+                                                       'Signal_transduction',
+                                                       'Transcription'), each=5))
+row.names(gene_functions_df) <- rownames(data)
+
+ann_colors <- list(
+  gene_functions = c("Oxidative_phosphorylation" = "#F46D43",
+              "Cell_cycle" = "#708238",
+              "Immune_regulation" = "#9E0142",
+              "Signal_transduction" = "beige", 
+              "Transcription" = "violet"), 
+  Group = c("Disease" = "darkgreen",
+              "Control" = "blueviolet"),
+  Lymphocyte_count = brewer.pal(5, 'PuBu')
+)
+
+pheatmap(data, 
+         col = brewer.pal(10, 'RdYlGn'),
+         #Adding Annotation Information
+         annotation_row = gene_functions_df, 
+         annotation_col = ann_df, 
+         annotation_colors = ann_colors,
+         # The same Customization
+         fontsize_col = 10,
+         fontsize_row = 10,
+         display_numbers = TRUE,
+         number_color = "black", 
+         fontsize_number = 6,
+         border_color = "black",
+         #A heading
+         main = "A Heatmap with Annotations") 
+
+```
+
